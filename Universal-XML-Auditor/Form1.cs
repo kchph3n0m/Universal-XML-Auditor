@@ -5,7 +5,16 @@ public partial class Form1 : Form
     private List<string> _lastResults = new();
     private CancellationTokenSource? _cts; // Manages the cancellation state
 
-    public Form1() => InitializeComponent();
+    public Form1()
+    {
+        InitializeComponent();
+
+        // Pull the version from the Assembly (Package Version)
+        Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+        // Update the Form Title bar automatically
+        this.Text = $"Universal XML Auditor v{version.Major}.{version.Minor}.{version.Build}";
+    }
 
     private string SelectFile(string filter)
     {
