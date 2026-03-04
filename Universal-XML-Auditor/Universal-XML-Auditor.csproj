@@ -10,6 +10,7 @@
     <ApplicationIcon>favicon (2).ico</ApplicationIcon>
 	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	<Authors>Kyle Holdstein</Authors>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
