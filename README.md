@@ -1,5 +1,5 @@
 ![Build Status](https://github.com/kchph3n0m/Universal-XML-Auditor/actions/workflows/build.yml/badge.svg)
-
+![CI Pipeline](https://github.com/kchph3n0m/Universal-XML-Auditor/actions/workflows/ci.yml/badge.svg)
 Universal XML Auditor
 A high-performance .NET 9 utility for validating large XML logs and verifying associated file system integrity.
 
