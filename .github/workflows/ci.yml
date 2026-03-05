@@ -29,3 +29,12 @@ jobs:
     - name: Run xUnit Tests
       # This runs the same test you validated locally yesterday
       run: dotnet test Universal-XML-Auditor.sln --configuration Release --no-build --verbosity normal
+
+    - name: Publish Application
+      run: dotnet publish Universal-XML-Auditor/Universal-XML-Auditor.csproj --configuration Release --output ./compiled-app
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Universal-XML-Auditor-Release
+        path: ./compiled-app
