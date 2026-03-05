@@ -205,7 +205,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(800, 600);
             Name = "Form1";
-            Text = "Universal XML Auditor v1.0.1";
+            Text = "Universal XML Auditor v1.0.2";
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
