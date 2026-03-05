@@ -1,0 +1,31 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # Crucial: WinForms (.net9.0-windows) requires a Windows runner to compile
+    runs-on: windows-latest 
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore Dependencies
+      run: dotnet restore Universal-XML-Auditor.sln
+
+    - name: Build Solution
+      run: dotnet build Universal-XML-Auditor.sln --configuration Release --no-restore
+
+    - name: Run xUnit Tests
+      # This runs the same test you validated locally yesterday
+      run: dotnet test Universal-XML-Auditor.sln --configuration Release --no-build --verbosity normal

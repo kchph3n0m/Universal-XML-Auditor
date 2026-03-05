@@ -12,13 +12,19 @@ public class XmlAuditor
     private static readonly Regex FilePattern = new(@"\.(pdf|txt|jpg|csv|zip|png)$",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    public void Validate(string xmlPath, string xsdPath, IProgress<int>? progressPct = null, IProgress<string>? progressError = null, CancellationToken ct = default)
+    public bool Validate(string xmlPath, string xsdPath, IProgress<int>? progressPct = null, IProgress<string>? progressError = null, CancellationToken ct = default)
     {
         Errors = [];
         _hasAlertedPath = false;
         int uiReportCount = 0;
         const int MaxUiErrors = 1000;
         string? xmlDirectory = Path.GetDirectoryName(xmlPath);
+
+        if (!File.Exists(xmlPath) || !File.Exists(xsdPath))
+        {
+            progressError?.Report("CRITICAL: Input file or Schema path not found.");
+            return false;
+        }
 
         try
         {
@@ -87,14 +93,18 @@ public class XmlAuditor
                 }
             }
             progressPct?.Report(100);
+
+            return Errors.Count == 0;
         }
         catch (OperationCanceledException)
         {
             progressError?.Report($"[{DateTime.Now:HH:mm:ss}] Audit manually cancelled by user.");
+            return false;
         }
         catch (Exception ex)
         {
             progressError?.Report($"FATAL ERROR: {ex.Message}");
+            return false;
         }
     }
 }

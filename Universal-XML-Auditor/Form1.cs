@@ -36,6 +36,10 @@ public partial class Form1 : Form
             return;
         }
 
+        // Grabbing the text BEFORE Task.Run prevents cross-thread UI crashes!
+        string currentXmlPath = txtXmlPath.Text;
+        string currentXsdPath = txtXsdPath.Text;
+
         // 2. Start Audit Logic
         lstErrors.Items.Clear();
         _lastResults.Clear();
@@ -53,24 +57,27 @@ public partial class Form1 : Form
 
         try
         {
-            // 3. Pass the Token to the background thread
+            // 3. Pass the Token AND the Progress reporters to the background thread
             _lastResults = await Task.Run(() =>
             {
                 var auditor = new XmlAuditor();
-                auditor.Validate(txtXmlPath.Text, txtXsdPath.Text, barProgress, errorProgress, _cts.Token);
+
+                // We pass the REAL barProgress, errorProgress, and token here. No nulls!
+                bool result = auditor.Validate(currentXmlPath, currentXsdPath, barProgress, errorProgress, _cts.Token);
+
                 return auditor.Errors;
             }, _cts.Token);
         }
-        catch (Exception)
+        catch (OperationCanceledException)
         {
-            // Exceptions are caught and reported within the XmlAuditor.Validate method
+            // Expected when the user cancels via the token
         }
         finally
         {
             // 4. Reset UI State when finished or cancelled
             btnRun.Text = "Run Audit";
             btnRun.Enabled = true;
-            _cts.Dispose();
+            _cts?.Dispose();
             _cts = null;
             lblStatus.Text = $"Done. Found {_lastResults.Count} total issues.";
         }
