@@ -35,8 +35,11 @@ jobs:
       # This runs the same test you validated locally yesterday
       run: dotnet test Universal-XML-Auditor.sln --configuration Release --no-build --verbosity normal
 
-    - name: Publish Application
-      run: dotnet publish Universal-XML-Auditor/Universal-XML-Auditor.csproj --configuration Release --output ./compiled-app
+    - name: Publish Standalone Executable
+      # -r win-x64: Targets Windows specifically (required for single-file)
+      # --self-contained true: Bundles the entire .NET runtime inside the exe
+      # -p:PublishSingleFile=true: Merges all DLLs into one pristine .exe file
+      run: dotnet publish Universal-XML-Auditor/Universal-XML-Auditor.csproj --configuration Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output ./compiled-app
 
     - name: Zip Release Package
       # Only run this step if the commit has a 'v' tag
