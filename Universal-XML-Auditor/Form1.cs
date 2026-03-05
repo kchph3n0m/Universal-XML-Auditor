@@ -9,11 +9,19 @@ public partial class Form1 : Form
     {
         InitializeComponent();
 
-        // Pull the version from the Assembly (Package Version)
-        Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        // 1. Add the '?' to explicitly tell the compiler this might be null
+        Version? version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
-        // Update the Form Title bar automatically
-        this.Text = $"Universal XML Auditor v{version.Major}.{version.Minor}.{version.Build}";
+        // 2. Defensively check before dereferencing
+        if (version != null)
+        {
+            this.Text = $"Universal XML Auditor v{version.Major}.{version.Minor}.{version.Build}";
+        }
+        else
+        {
+            // Fallback just in case the assembly metadata is completely missing
+            this.Text = "Universal XML Auditor";
+        }
     }
 
     private string SelectFile(string filter)
@@ -93,5 +101,10 @@ public partial class Form1 : Form
             File.WriteAllLines(sfd.FileName, _lastResults);
             MessageBox.Show("Report exported successfully.");
         }
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+
     }
 }

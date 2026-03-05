@@ -206,6 +206,7 @@
             MinimumSize = new Size(800, 600);
             Name = "Form1";
             Text = "Universal XML Auditor v1.0.1";
+            Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             status_strip1.ResumeLayout(false);
