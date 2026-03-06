@@ -16,6 +16,7 @@ public class XmlAuditor
     {
         Errors = [];
         _hasAlertedPath = false;
+        progressError?.Report($"[{DateTime.Now:HH:mm:ss}] Starting audit: {Path.GetFileName(xmlPath)}...");
         int uiReportCount = 0;
         const int MaxUiErrors = 1000;
         string? xmlDirectory = Path.GetDirectoryName(xmlPath);
@@ -29,6 +30,11 @@ public class XmlAuditor
         try
         {
             var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema };
+
+            // Force the parser to report warnings and identity constraint failures
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings |
+                                        XmlSchemaValidationFlags.ProcessIdentityConstraints;
+
             settings.Schemas.Add(null, xsdPath);
 
             settings.ValidationEventHandler += (sender, e) => {

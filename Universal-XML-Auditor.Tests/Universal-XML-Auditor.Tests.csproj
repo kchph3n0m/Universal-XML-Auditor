@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Universal-XML-Auditor\Universal-XML-Auditor.csproj" />
+	  <ProjectReference Include="..\Universal-XML-Auditor\Universal-XML-Auditor.csproj" />
 	</ItemGroup>
 
 </Project>
